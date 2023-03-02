@@ -1,5 +1,5 @@
 //rfce keyword shortcut
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 function SauCompE() {
 
@@ -9,35 +9,57 @@ function SauCompE() {
     const [total, setTotal] = useState(0);
     const [grade, setGrade] = useState("?");
 
+    useEffect(()=>{
+        calGrade();
+    }, [midterm, final]);
+
     const handleChangeOfName = (e) => {
         setStuName(e.target.value);
     };
     const handleChangeOfMidterm = (e) => {
-        setMidterm(e.target.value);
+        if(e.target.value === ""){
+            setMidterm(0);
+        }else{
+            setMidterm(e.target.value);
+        }
+        
+        
     };
     const handleChangeOfFinal = (e) => {
-        setFinal(e.target.value);
+        if(e.target.value === ""){
+            setFinal(0);
+        }else{
+            setFinal(e.target.value);
+        }
+        
+        
     };
-    const handleChangeOfTotal = (e) => {
-        setTotal(parseFloat(midterm) + parseFloat(final));
-        setGrade(
-            parseFloat(midterm) + parseFloat(final) > 80 ? "A":
-            parseFloat(midterm) + parseFloat(final) >= 71 ? "B":
-            parseFloat(midterm) + parseFloat(final) >= 61 ? "C":
-            parseFloat(midterm) + parseFloat(final) >= 51 ? "D":
-            "E"
-           );
-    };
+    // const handleChangeOfTotal = (e) => {
+    //     setTotal(parseFloat(midterm) + parseFloat(final));
+    //     calGrade();
+
+    // };
     const handleReset = (e) => {
-        document.getElementById("name").value="";
-        document.getElementById("mid").value="";
-        document.getElementById("final").value="";
+        document.getElementById("name").value = "";
+        document.getElementById("mid").value = "";
+        document.getElementById("final").value = "";
         setStuName("????");
         setMidterm(0);
         setFinal(0);
         setTotal(0);
         setGrade("?");
     };
+
+    const calGrade = () => {
+        setTotal(parseFloat(midterm) + parseFloat(final));
+        setGrade(
+            (parseFloat(midterm) + parseFloat(final)) > 80 ? "A" :
+            (parseFloat(midterm) + parseFloat(final)) >= 71 ? "B" :
+            (parseFloat(midterm) + parseFloat(final)) >= 61 ? "C" :
+            (parseFloat(midterm) + parseFloat(final)) >= 51 ? "D" :
+            "F"
+        );
+    }
 
     return (
         <>
@@ -46,7 +68,7 @@ function SauCompE() {
             ป้อนชื่อ : <input id='name' onChange={handleChangeOfName} type="text" placeholder="ชื่อ-สกุล" /><br /><br />
             ป้อนกลางภาค : <input id='mid' onChange={handleChangeOfMidterm} type="number" placeholder="0.00" /><br /><br />
             ป้อนปลายภาค : <input id='final' onChange={handleChangeOfFinal} type="number" placeholder="0.00" /><br /><br />
-            <button onClick={handleChangeOfTotal}>คำนวณ</button>&nbsp;&nbsp;<button onClick={handleReset}>ยกเลิก</button>
+            <button onClick={calGrade}>คำนวณ</button>&nbsp;&nbsp;<button onClick={handleReset}>ยกเลิก</button>
             <hr />
             คุณ : {stuName}<br />
             คะแนนกลางภาค : {midterm}<br />
